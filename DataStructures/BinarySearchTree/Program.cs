@@ -4,19 +4,28 @@
     {
         static void Main(string[] args)
         {
-            Tree<int> t = new Tree<int>();
-           // t.Insert(67);
-            t.Insert(41);
-            t.Insert(90);
-            t.Insert(100);
-            t.Insert(80);
-            t.Insert(95);
-            t.Insert(13);
-            t.Insert(10);
-            t.Insert(2);
-            bool b =t.Insert(67);
-            bool h = t.Insert(67);
-            Node<int> p = t.Search(13);
+            Tree<string> t = new Tree<string>();
+            t.Insert("f");
+            t.Insert("b");
+            t.Insert("a");
+            t.Insert("d");
+            t.Insert("c");
+            t.Insert("e");
+            t.Insert("g");
+            t.Insert("i");
+            t.Insert("h");
+
+            //bool b = t.Insert(67);
+            //bool h = t.Insert(67);
+            //Node<int> p = t.Search(13);
+
+            // int l = t.Maximum(t.root.Right.Right);
+            bool q;
+            q = t.Remove("f");
+            q = t.Remove("d");
+            q = t.Remove("h");
+            q = t.Remove("e");
+
         }
     }
 }
