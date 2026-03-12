@@ -1,0 +1,1 @@
+﻿using System;using System.Collections.Generic;using System.Security.Cryptography.X509Certificates;using System.Text;namespace AVLtree{public class Node<T>{public Node(T v) { Value = v;Height = 1;} public Node() { } public Node<T> Left { get; set; } public Node<T> Right { get; set; }  public T Value { get; set; }public int Height; } }

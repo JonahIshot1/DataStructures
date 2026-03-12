@@ -21,10 +21,8 @@
 
             // int l = t.Maximum(t.root.Right.Right);
             bool q;
-            q = t.Remove("f");
-            q = t.Remove("d");
-            q = t.Remove("h");
-            q = t.Remove("e");
+            Queue<string>s = new Queue<string>();
+            t.postOrderRecursive(s,t.root);
 
         }
     }

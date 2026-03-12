@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="QuickSort/QuickSort.csproj" />
+  <Project Path="Test/Test.csproj" Id="435c1a7b-c585-4293-bc44-911bc33880b5" />
+</Solution>

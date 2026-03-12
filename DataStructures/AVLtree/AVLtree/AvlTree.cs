@@ -1,46 +1,151 @@
-﻿namespace BinarySearchTree
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
+using System.Text;
+using System.Xml;
+
+namespace AVLtree
+
 {
-    public class Tree<T> where T : IComparable<T>
+    public class AVLtree<T> where T : IComparable<T>
     {
         public Node<T> root;
-        public Tree()
+        public AVLtree()
         {
         }
-        public bool Insert(T value)
+       
+        public void Remove(T target)
         {
+            if (root == null) throw new NullReferenceException();
+            root = removeHelp(root, root, target);
+        }
+        Node<T> removeHelp(Node<T> prev, Node<T> curVal, T target)
+        {
+            if (curVal == null) throw new ArgumentException("value u wanted to delete doesnt exist");
 
-            if (root == null)
+            if (curVal.Value.CompareTo(target) > 0)
             {
-                root = new Node<T>();
-                root.Value = value;
-                return true;
+                curVal.Left = removeHelp(curVal, curVal.Left, target);
             }
-            Node<T> curVal = root;
-            while (!curVal.Value.Equals(value))
+            else if(!curVal.Value.Equals(target))
             {
-                if (curVal.Value.CompareTo(value) > 0)
-                {
-                    if (curVal.Left != null) { curVal = curVal.Left; }
-                    else
-                    {
-                        curVal.Left = new Node<T>();
-                        curVal.Left.Value = value;
-                        return true;
-                    }
-                }
-                else
-                {
-                    if (curVal.Right != null) { curVal = curVal.Right; }
-                    else
-                    {
-                        curVal.Right = new Node<T>();
-                        curVal.Right.Value = value;
-                        return true;
-                    }
-                }
+                curVal.Right = removeHelp(curVal, curVal.Right, target);
             }
-            return false;
+            else
+            {
+                Node<T>  temp = GetReplacement(curVal);
+                if(temp!= null)
+                    Height(temp);
+                return temp;
+            }
+            return curVal;
         }
+
+        Node<T> GetReplacement(Node<T> curr)
+        {
+            if (curr.Left == null && curr.Right == null) return null;
+            if (curr.Left == null) return curr.Right;
+            if (curr.Right == null) return curr.Left;
+            if (curr.Left.Right == null)
+            {
+                Node<T> teemp = curr.Left;
+                curr.Left = curr.Left.Left;
+                teemp.Right = curr.Right;
+                return teemp;
+            }
+            Node<T> temp = curr.Left;
+            while (temp.Right.Right != null)
+            {
+                temp = temp.Right;
+            }
+            Node<T> temp3 = temp.Right.Left; 
+            Node<T> temp2 = temp.Right;
+            temp2.Right = curr.Right;
+            temp2.Left = curr.Left;
+            temp.Right = temp3;
+            return temp2;
+        }
+        public int checkBalance(Node<T> pos)
+        {
+            int l;
+            int r;
+            if (pos.Left == null) l = 0;
+            else l = pos.Left.Height;
+            if (pos.Right == null) r = 0;
+            else r = pos.Right.Height;
+            return r - l;
+
+        }
+        Node<T> rotate (Node<T>pos)
+        {
+            int bal = checkBalance(pos);
+            if (Math.Abs(bal)<2) return pos;
+            if(bal>0)
+            {
+                if (checkBalance(pos.Right) < 0)
+                {
+                    pos.Right = rotR(pos.Right);
+                }
+                return rotL(pos);
+            }
+            else
+            {
+                if (checkBalance(pos.Left) > 0)
+                {
+                    pos.Left = rotL(pos.Left);
+                }
+                return rotR(pos);
+            }
+        }
+        Node<T> rotL(Node<T> pos)
+        {
+            Node<T> temp = pos.Right;
+            pos.Right = temp.Left;
+            temp.Left = pos;
+            Height(temp.Left);
+            Height(temp);
+            return temp;
+        }
+        Node<T> rotR(Node<T> pos)
+        {
+            Node<T> temp = pos.Left;
+            pos.Left = temp.Right;
+            temp.Right = pos;
+            Height(temp.Right);
+            Height(temp);
+            return temp;
+        }
+
+        void Height(Node<T> pos)
+        {
+            if (pos.Left == null && pos.Right != null) pos.Height = pos.Right.Height + 1;
+            else if (pos.Right == null && pos.Left != null) pos.Height = pos.Left.Height + 1;
+            else if (pos.Right != null) pos.Height = Math.Max(pos.Right.Height, pos.Left.Height) + 1;
+            else pos.Height = 1;
+        }
+        public void Insert2(T val)
+        {
+            root = insertHelp(root, val);
+        }
+        Node<T> insertHelp(Node<T> curVal, T val)
+        {
+            if (curVal == null)
+            {
+                return new Node<T>(val);
+            }
+
+            if (curVal.Value.CompareTo(val) > 0)
+            {
+                curVal.Left =insertHelp(curVal.Left, val);
+            }
+            else
+            {
+                curVal.Right = insertHelp(curVal.Right, val);
+            }
+            Height(curVal);
+            return rotate(curVal);
+        }
+
         public Node<T> Search(T value)
         {
             if (root == null)
@@ -172,45 +277,19 @@
             }
             return OutP;
         }
-        public bool Remove(T Target)
-        {
-            Node<T> outP = new Node<T>();
-            outP = Search(Target);
-            if (outP == null) return false;
-            Node<T> temp = new Node<T>();
-            Node<T> previous = new Node<T>();
-            if (outP.Left != null) temp = outP.Left;
-            while (true)
-            {
-
-                if (temp.Right != null)
-                {
-                    previous = temp;
-                    temp = temp.Right;
-
-                }
-                else break;
-            }
-            outP.Value = temp.Value;
-            if (temp.Left != null) previous.Right = temp.Left;
-            previous.Right = null;
-
-            return true;
-
-
-        }
-        public Queue<T> inOrderRecursive(Queue<T> outP,Node<T> cur)
+       
+        public Queue<Node<T>> inOrderRecursive(Queue<Node<T>> outP, Node<T> cur)
         {
             if (cur == null) return outP;
             inOrderRecursive(outP, cur.Left);
-            outP.Enqueue(cur.Value);
+            outP.Enqueue(cur);
             inOrderRecursive(outP, cur.Right);
             return outP;
             //call inOrder on left side
             //add curr to output
             //call inOrder on right side
         }
-        public Queue<T> preOrderRecursive(Queue<T> outP,Node<T>cur)
+        public Queue<T> preOrderRecursive(Queue<T> outP, Node<T> cur)
         {
             if (cur == null) return outP;
             outP.Enqueue(cur.Value);
