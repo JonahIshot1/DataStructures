@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SortedDoublyLinkedList/SortedDoublyLinkedList.csproj" />
+  <Project Path="SortedDoublyLinkedListTEst/SortedDoublyLinkedListTEst.csproj" />
+</Solution>
