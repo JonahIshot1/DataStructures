@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="SkipList/SkipList.csproj" />
+  <Project Path="SkipListTest/SkipListTest.csproj" Id="a79e537e-0c63-4b07-9f76-b3e0578fb805" />
+</Solution>
