@@ -113,6 +113,17 @@ namespace SkipListTest
 
             Assert.True(list2.numDump().Count == 100);
         }
+        [Fact]
+        public void TestLocate()
+        {
+            SList<int> list = new SList<int>();
+            for (int i = 0; i < 100; i++)
+            {
+                list.IN(i);
+            }
+            Assert.True(list.locatePrev(1000) == null);
+            Assert.True(list.locatePrev(10) != null);
+        }
 
     }
 }

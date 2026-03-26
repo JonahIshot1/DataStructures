@@ -33,7 +33,7 @@ namespace SkipList
         }
         public int getNewHeight()
         {
-            Random randy = new Random();
+            Random randy = new Random(677);
             int height = 1;
             while (randy.Next(0, 2) == 0)
             {
@@ -70,33 +70,73 @@ namespace SkipList
         {
             int height = New.Height;
             BuildStack(New);
+            BuildSent(New);
             Node<T> temp = sent;
             Node<T> Curent = New;
             while (temp.Height > New.Height) { temp = temp.Down; }
             while (temp.Height != 0)
             {
-                while (temp.Next != null && temp.Next.Value.CompareTo(New.Value) < 0)
+                while (temp.Next != null && temp.Next.Value.CompareTo(Curent.Value) < 0)
                 {
                     temp = temp.Next;
                 }//every thing above works it gets into the right space but i think that making and breaking the conections 
                 Node<T> oldNext = temp.Next;
-                temp.Next = New;
-                New.Next= oldNext;
+                temp.Next = Curent;
+                Curent.Next= oldNext;
                 temp = temp.Down;
+                Curent = Curent.Down;
                 if (temp == null) return;
                 if (Curent == null) return;
-                Curent = Curent.Down;
             }
 
 
+        }
+        public Node<T> locatePrev(T val)
+        {
+            Node<T> temp = sent;
+            do
+            {
+                if (temp.Next == null|| temp.Next.Value.CompareTo(val) > 0)
+                {
+                    if (temp.Down==null) return null;
+                    if (temp.Down.Next == null) return null;
+                    temp = temp.Down;
+                }
+
+                else
+                {
+                    if (temp.Next.Next == null) return null;
+                    temp = temp.Next;
+                }
+            } while (!temp.Next.Value.Equals(val));
+            return temp;
         }
         public void IN(T val)
         {
             Stack(new Node<T>(val, getNewHeight()));
         }
-        public void REM()
+        public bool REM(T val)
         {
+            throw new NotImplementedException();
+            //Node<T> temp = sent;
+            //Node<T> Curent;
+            //while (temp.Height > New.Height) { temp = temp.Down; }
+            //while (temp.Height != 0)
+            //{
+            //    while (temp.Next != null && temp.Next.Value.CompareTo(Curent.Value) < 0)
+            //    {
+            //        temp = temp.Next;
+            //    }//every thing above works it gets into the right space but i think that making and breaking the conections 
+            //    Node<T> oldNext = temp.Next;
+            //    temp.Next = Curent;
+            //    Curent.Next = oldNext;
+            //    temp = temp.Down;
+            //    Curent = Curent.Down;
+            //    if (temp == null) return;
+            //    if (Curent == null) return;
+            //}
 
+            //return true;
         }
 
 
