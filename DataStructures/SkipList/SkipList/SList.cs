@@ -120,7 +120,7 @@ namespace SkipList
             throw new NotImplementedException();
             //Node<T> temp = sent;
             //Node<T> Curent;
-            //while (temp.Height > New.Height) { temp = temp.Down; }
+            //while (temp.Height > New.Height) { temp = temp.Down; }d
             //while (temp.Height != 0)
             //{
             //    while (temp.Next != null && temp.Next.Value.CompareTo(Curent.Value) < 0)
