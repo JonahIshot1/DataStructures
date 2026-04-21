@@ -123,6 +123,28 @@ namespace SkipListTest
             }
             Assert.True(list.locatePrev(1000) == null);
             Assert.True(list.locatePrev(10) != null);
+            Assert.True(list.locatePrev(10).Next.Value==10);
+        }
+        [Fact]
+        public void TestRemove()
+        {
+            SList<int> list = new SList<int>();
+            for (int i = 0; i < 100; i++)
+            {
+                list.IN(i);
+            }
+            Assert.True(list.REM(1000)==false);
+            for(int i =0; i < 99;i++)
+            {
+                list.REM(i);
+                int[] outPut = list.numDump().ToArray();
+                for(int l=0;l < outPut.Length;l++)
+                {
+                    Assert.True(outPut[l] != i);
+                }
+            }
+            SList<int> list2 = new SList<int>();
+            Assert.True( list2.REM(2)==false);
         }
 
     }

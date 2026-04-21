@@ -94,6 +94,8 @@ namespace SkipList
         public Node<T> locatePrev(T val)
         {
             Node<T> temp = sent;
+            if (temp.Next == null)return null;
+            if (sent.Next.Value.Equals(val)) return sent;
             do
             {
                 if (temp.Next == null|| temp.Next.Value.CompareTo(val) > 0)
@@ -115,28 +117,23 @@ namespace SkipList
         {
             Stack(new Node<T>(val, getNewHeight()));
         }
+
         public bool REM(T val)
         {
-            throw new NotImplementedException();
-            //Node<T> temp = sent;
-            //Node<T> Curent;
-            //while (temp.Height > New.Height) { temp = temp.Down; }d
-            //while (temp.Height != 0)
-            //{
-            //    while (temp.Next != null && temp.Next.Value.CompareTo(Curent.Value) < 0)
-            //    {
-            //        temp = temp.Next;
-            //    }//every thing above works it gets into the right space but i think that making and breaking the conections 
-            //    Node<T> oldNext = temp.Next;
-            //    temp.Next = Curent;
-            //    Curent.Next = oldNext;
-            //    temp = temp.Down;
-            //    Curent = Curent.Down;
-            //    if (temp == null) return;
-            //    if (Curent == null) return;
-            //}
-
-            //return true;
+            Node<T> Prev = locatePrev(val);
+            if (Prev == null) return false;
+            int height = Prev.Height;
+            while (height > 0) 
+            { 
+                while(!Prev.Next.Value.Equals(val))
+                {
+                    Prev = Prev.Next;
+                }
+                Prev.Next=Prev.Next.Next;
+                Prev = Prev.Down;
+                height--;
+            }
+            return true;
         }
 
 

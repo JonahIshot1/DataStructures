@@ -11,10 +11,11 @@
             list.IN(216);
             list.IN(35);
             list.IN(62);
+            list.REM(6);
 
             Queue<int> outP = list.numDump();
 
 
-        }
+       }
     }
 }
