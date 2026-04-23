@@ -63,14 +63,14 @@ namespace wAndDGraphs
             }
             return null;
         }
-        public Queue<T> traverse(Vertex<T>start)
+        public Queue<T> traverse(Vertex<T> start)
         {
             if (start is null) return null;
-            Queue < Vertex<T> > next = new();
+            Queue<Vertex<T>> next = new();
             Queue<T> outP = new();
-            
+
             next.Enqueue(start);
-            while(next.Count!=0)
+            while (next.Count != 0)
             {
                 Vertex<T> cur = next.Dequeue();
                 if (cur.Edges is not null)
@@ -87,6 +87,39 @@ namespace wAndDGraphs
                 outP.Enqueue(cur.Value);
             }
             return outP;
+        }
+        public List<Edge<T>> pathfind(Vertex<T> start, Vertex<T> target)
+        {
+            if (start is null) return null;
+            Queue<Vertex<T>> next = new();
+            Dictionary<Vertex<T>, Edge<T>> dic = new(); 
+            List<Edge<T>> outP = new();
+
+            next.Enqueue(target);
+            while (next.Count != 0)
+            {
+                Vertex<T> cur = next.Dequeue();
+                if (cur.Edges is not null)
+                {
+                    for (int i = 0; i < cur.Edges.Count; i++)
+                    {
+                        next.Enqueue(cur.Edges[i].EndVertex);
+                        dic.Add(cur.Edges[i].EndVertex, cur.Edges[i]);
+                        if (cur.Edges[i].EndVertex.Equals(start))
+                        {
+                            Edge<T> curE = cur.Edges[i];
+                            while (true)
+                            {
+                                outP.Add(curE);
+                                if (curE.EndVertex.Equals(target)) return outP;
+                                curE = dic[curE.EndVertex];  
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+
         }
     }
 }

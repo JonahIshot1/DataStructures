@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="PathfindTest/PathfindTest.csproj" Id="71617202-b21a-496a-9398-7320ad52b591" />
   <Project Path="wAndDGraphs/wAndDGraphs.csproj" />
 </Solution>
