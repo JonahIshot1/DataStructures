@@ -6,6 +6,7 @@ namespace PathfindTest
 {
     public class UnitTest1
     {
+
         [Fact]
         public void Pathfind_ShouldReturnCorrectPath()
         {
@@ -29,7 +30,7 @@ namespace PathfindTest
             c.Edges.Add(cd);
 
             // Act
-            var path = graph.pathfind(a, d);
+            var path = graph.pathfindBad(a, d);
 
             // Assert
             Assert.NotNull(path);

@@ -22,7 +22,16 @@ namespace wAndDGraphs
         public T Value { get; set; }
         public List<Edge<T>> Edges { get; set; }
 
-        public Vertex(T value) { Value = value; }
+        public Vertex(T value) { Value = value; Edges = new(); }
+    }
+    public class VertexInfo<T>
+    {
+        public Vertex<T> Vertex; // This is the original vertex
+
+        public float TotalCost;
+        public bool IsVisited;
+        public Edge<T> FoundingEdge;
+        public VertexInfo(Vertex<T> vertex) { Vertex = vertex; IsVisited = false;FoundingEdge = null;TotalCost = float.MaxValue; }
     }
 
 }
