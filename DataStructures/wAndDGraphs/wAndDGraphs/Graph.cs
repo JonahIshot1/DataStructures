@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace wAndDGraphs
+﻿namespace wAndDGraphs
 {
     public class Graph<T>()
     {
@@ -19,7 +15,10 @@ namespace wAndDGraphs
             if (vertex == null) return false;
             for (int i = 0; i < vertices.Count; i++)
             {
-                if (GetEdge(vertices[i], vertex) != null) RemoveEdge(vertices[i], vertex);
+                if (GetEdge(vertices[i], vertex) != null)
+                {
+                    RemoveEdge(vertices[i], vertex);
+                }
             }
             vertices.Remove(vertex);
             return true;
@@ -63,7 +62,7 @@ namespace wAndDGraphs
             }
             return null;
         }
-        public Queue<T> traverse(Vertex<T> start)
+        public Queue<T> Traverse(Vertex<T> start)
         {
             if (start is null) return null;
             Queue<Vertex<T>> next = new();
@@ -90,43 +89,69 @@ namespace wAndDGraphs
         }
         public List<Edge<T>> pathFindgood(Vertex<T> start, Vertex<T> target)
         {
-            List<VertexInfo<T>> verti = new();
-            for (int i =0; i < vertices.Count;i++)
+            if (start is null) return null;
+            PriorityQueue<Vertex<T>,float> next = new();
+            Dictionary<Vertex<T>, VertexInfo<T>> dic = new();
+            List<Edge<T>> outP = new();
+
+            next.Enqueue(start,0);
+            while (next.Count != 0)
             {
-                verti[i] = new VertexInfo<T>(vertices[i]);
+                VertexInfo<T> cur =  new VertexInfo<T>(next.Dequeue());
+                dic.Add(cur.Vertex, cur);
+                if(cur.Vertex.Equals(target))
+                {
+                    while (true)
+                    {
+                        outP.Add(cur.FoundingEdge);
+                        if (cur.FoundingEdge.StartVertex.Equals(start))
+                        {
+                            outP.Reverse();
+                            return outP;
+                        }
+                        cur = dic[cur.FoundingEdge.StartVertex];
+                    }
+                }
+                if (cur.Vertex.Edges is null) continue;
+
+                for (int i = 0; i < cur.Vertex.Edges.Count; i++)
+                {
+                    next.Enqueue(cur.Vertex.Edges[i].EndVertex,cur.TotalCost+ cur.Vertex.Edges[i].Cost);
+                }
             }
+            return null;       
         }
-        public List<Edge<T>> pathfindBad(Vertex<T> start, Vertex<T> target)
+        public List<Edge<T>> PathfindBad(Vertex<T> start, Vertex<T> target)
         {
             if (start is null) return null;
             Queue<Vertex<T>> next = new();
-            Dictionary<Vertex<T>, Edge<T>> dic = new(); 
+            Dictionary<Vertex<T>, Edge<T>> dic = new();
             List<Edge<T>> outP = new();
 
             next.Enqueue(start);
             while (next.Count != 0)
-            { 
+            {
                 Vertex<T> cur = next.Dequeue();
-                if (cur.Edges is not null)
+                if (cur.Edges is null) continue;
+
+                for (int i = 0; i < cur.Edges.Count; i++)
                 {
-                    for (int i = 0; i < cur.Edges.Count; i++)
+                    next.Enqueue(cur.Edges[i].EndVertex);
+                    if (dic.ContainsKey(cur.Edges[i].EndVertex)) continue;
+
+                    dic.Add(cur.Edges[i].EndVertex, cur.Edges[i]);
+                    if (!cur.Edges[i].EndVertex.Equals(target)) continue;
+                    
+                    Edge<T> curE = cur.Edges[i];
+                    while (true)
                     {
-                        next.Enqueue(cur.Edges[i].EndVertex);
-                        dic.Add(cur.Edges[i].EndVertex, cur.Edges[i]);
-                        if (cur.Edges[i].EndVertex.Equals(target))
+                        outP.Add(curE);
+                        if (curE.StartVertex.Equals(start))
                         {
-                            Edge<T> curE = cur.Edges[i];
-                            while (true)
-                            {
-                                outP.Add(curE);
-                                if (curE.StartVertex.Equals(start))
-                                {
-                                    outP.Reverse();
-                                    return outP;
-                                }
-                                    curE = dic[curE.StartVertex];  
-                            }
+                            outP.Reverse();
+                            return outP;
                         }
+                        curE = dic[curE.StartVertex];
                     }
                 }
             }

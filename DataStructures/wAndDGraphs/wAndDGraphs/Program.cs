@@ -20,7 +20,7 @@ namespace wAndDGraphs
                 grap.AddEdge(verti[rand.Next(1, 100)], verti[rand.Next(1, 100)],10);
             }
 
-            Queue<int> p = grap.traverse(grap.vertices[2]);
+            Queue<int> p = grap.Traverse(grap.vertices[2]);
         }
     }
 }

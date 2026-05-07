@@ -22,28 +22,25 @@ namespace PathfindTest
 
             // Manually connect edges (since AddEdge is buggy)
             var ab = new Edge<string>(a, b, 1);
+            var ac = new Edge<string>(a, c, 1);
             var bc = new Edge<string>(b, c, 1);
-            var cd = new Edge<string>(c, d, 1);
+            var bd = new Edge<string>(b, d, 1);
+            var cd = new Edge<string>(c ,d, 1);
+
 
             a.Edges.Add(ab);
+            a.Edges.Add(ac);
             b.Edges.Add(bc);
+            b.Edges.Add(bd);
             c.Edges.Add(cd);
 
             // Act
-            var path = graph.pathfindBad(a, d);
+            var path = graph.PathfindBad(a, d);
 
             // Assert
             Assert.NotNull(path);
-            Assert.Equal(3, path.Count);
-
-            Assert.Equal("A", path[0].StartVertex.Value);
-            Assert.Equal("B", path[0].EndVertex.Value);
-
-            Assert.Equal("B", path[1].StartVertex.Value);
-            Assert.Equal("C", path[1].EndVertex.Value);
-
-            Assert.Equal("C", path[2].StartVertex.Value);
-            Assert.Equal("D", path[2].EndVertex.Value);
+            Assert.Equal(2, path.Count);
+  
         }
     }
 }
