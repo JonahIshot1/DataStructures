@@ -31,7 +31,13 @@ namespace wAndDGraphs
         public float TotalCost;
         public bool IsVisited;
         public Edge<T> FoundingEdge;
-        public VertexInfo(Vertex<T> vertex) { Vertex = vertex; IsVisited = false;FoundingEdge = null;TotalCost = float.MaxValue; }
+        public VertexInfo(Vertex<T> vertex, Edge<T> fe,float tot)
+        { 
+            Vertex = vertex;
+            IsVisited = false;
+            FoundingEdge = fe;
+            TotalCost = tot;
+        }
     }
 
 }

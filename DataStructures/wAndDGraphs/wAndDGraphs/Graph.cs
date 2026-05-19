@@ -1,4 +1,6 @@
-﻿namespace wAndDGraphs
+﻿using System.Drawing;
+
+namespace wAndDGraphs
 {
     public class Graph<T>()
     {
@@ -87,17 +89,24 @@
             }
             return outP;
         }
-        public List<Edge<T>> pathFindgood(Vertex<T> start, Vertex<T> target)
+
+        public static List<Vertex<Point>> AStar(Vertex<Point> start, Vertex<Point> end, Graph<Point> graph)       
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Edge<T>> Pathfindgood(Vertex<T> start, Vertex<T> target)
         {
             if (start is null) return null;
-            PriorityQueue<Vertex<T>,float> next = new();
+            PriorityQueue<VertexInfo<T>,float> next = new();
             Dictionary<Vertex<T>, VertexInfo<T>> dic = new();
             List<Edge<T>> outP = new();
 
-            next.Enqueue(start,0);
+            next.Enqueue(new VertexInfo<T>(start,null,0),0);
             while (next.Count != 0)
             {
-                VertexInfo<T> cur =  new VertexInfo<T>(next.Dequeue());
+                VertexInfo<T> cur =  next.Dequeue();
+                if (dic.ContainsKey(cur.Vertex)) continue;
                 dic.Add(cur.Vertex, cur);
                 if(cur.Vertex.Equals(target))
                 {
@@ -116,7 +125,8 @@
 
                 for (int i = 0; i < cur.Vertex.Edges.Count; i++)
                 {
-                    next.Enqueue(cur.Vertex.Edges[i].EndVertex,cur.TotalCost+ cur.Vertex.Edges[i].Cost);
+                    VertexInfo<T> temp = new(cur.Vertex.Edges[i].EndVertex, cur.Vertex.Edges[i], cur.TotalCost + cur.Vertex.Edges[i].Cost);
+                    next.Enqueue(temp,temp.TotalCost);
                 }
             }
             return null;       
