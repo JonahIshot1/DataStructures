@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace wAndDGraphs
 {
@@ -89,26 +90,63 @@ namespace wAndDGraphs
             }
             return outP;
         }
-
-        public static List<Vertex<Point>> AStar(Vertex<Point> start, Vertex<Point> end, Graph<Point> graph)       
+        private float hur(Point vertex,Point goal)
         {
-            throw new NotImplementedException();
+            float dx = Math.Abs(vertex.X - goal.X);
+            float dy = Math.Abs(vertex.Y - goal.Y);
+            return(dx + dy);
+        }
+        public List<Edge<Point>> AStar(Vertex<Point> start, Vertex<Point> target)
+        {
+            if (start is null) return null;
+            PriorityQueue<VertexInfo<Point>, float> next = new();
+            Dictionary<Vertex<Point>, VertexInfo<Point>> dic = new();
+            List<Edge<Point>> outP = new();
+
+            next.Enqueue(new VertexInfo<Point>(start, null, 0), hur(target.Value,start.Value));
+            while (next.Count != 0)
+            {
+                VertexInfo<Point> cur = next.Dequeue();
+                if (dic.ContainsKey(cur.Vertex)) continue;
+                dic.Add(cur.Vertex, cur);
+                if (cur.Vertex.Equals(target))
+                {
+                    while (true)
+                    {
+                        outP.Add(cur.FoundingEdge);
+                        if (cur.FoundingEdge.StartVertex.Equals(start))
+                        {
+                            outP.Reverse();
+                            return outP;
+                        }
+                        cur = dic[cur.FoundingEdge.StartVertex];
+                    }
+                }
+                if (cur.Vertex.Edges is null) continue;
+
+                for (int i = 0; i < cur.Vertex.Edges.Count; i++)
+                {
+                    VertexInfo<Point> temp = new(cur.Vertex.Edges[i].EndVertex, cur.Vertex.Edges[i], cur.TotalCost + cur.Vertex.Edges[i].Cost);
+                    next.Enqueue(temp, temp.TotalCost+hur(target.Value, temp.Vertex.Value));
+                }
+            }
+            return null;
         }
 
         public List<Edge<T>> Pathfindgood(Vertex<T> start, Vertex<T> target)
         {
             if (start is null) return null;
-            PriorityQueue<VertexInfo<T>,float> next = new();
+            PriorityQueue<VertexInfo<T>, float> next = new();
             Dictionary<Vertex<T>, VertexInfo<T>> dic = new();
             List<Edge<T>> outP = new();
 
-            next.Enqueue(new VertexInfo<T>(start,null,0),0);
+            next.Enqueue(new VertexInfo<T>(start, null, 0), 0);
             while (next.Count != 0)
             {
-                VertexInfo<T> cur =  next.Dequeue();
+                VertexInfo<T> cur = next.Dequeue();
                 if (dic.ContainsKey(cur.Vertex)) continue;
                 dic.Add(cur.Vertex, cur);
-                if(cur.Vertex.Equals(target))
+                if (cur.Vertex.Equals(target))
                 {
                     while (true)
                     {
@@ -126,10 +164,10 @@ namespace wAndDGraphs
                 for (int i = 0; i < cur.Vertex.Edges.Count; i++)
                 {
                     VertexInfo<T> temp = new(cur.Vertex.Edges[i].EndVertex, cur.Vertex.Edges[i], cur.TotalCost + cur.Vertex.Edges[i].Cost);
-                    next.Enqueue(temp,temp.TotalCost);
+                    next.Enqueue(temp, temp.TotalCost);
                 }
             }
-            return null;       
+            return null;
         }
         public List<Edge<T>> PathfindBad(Vertex<T> start, Vertex<T> target)
         {
@@ -151,7 +189,7 @@ namespace wAndDGraphs
 
                     dic.Add(cur.Edges[i].EndVertex, cur.Edges[i]);
                     if (!cur.Edges[i].EndVertex.Equals(target)) continue;
-                    
+
                     Edge<T> curE = cur.Edges[i];
                     while (true)
                     {

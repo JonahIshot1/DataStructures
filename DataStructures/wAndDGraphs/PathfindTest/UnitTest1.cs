@@ -1,13 +1,120 @@
-﻿using wAndDGraphs;
-using System;
+﻿using System;
 using System.Collections.Generic;
-namespace PathfindTest;
+using System.Drawing;
+using wAndDGraphs;
 namespace PathfindTest
 {
+    [TestClass]
     public class UnitTest1
     {
+        [TestMethod]
+        public void AStar_ShouldRouteAroundWall()
+        {
+            // Arrange
+            Graph<Point> graph = new Graph<Point>();
 
-        [Fact]
+            int width = 20;
+            int height = 20;
+
+            Vertex<Point>[,] grid = new Vertex<Point>[width, height];
+
+            // Create vertices
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    grid[x, y] = new Vertex<Point>(new Point(x, y));
+                    graph.vertices.Add(grid[x, y]);
+                }
+            }
+
+            // Build obstacle wall like image
+            HashSet<Point> blocked = new HashSet<Point>();
+
+            // Large rectangle obstacle
+            for (int x = 4; x <= 12; x++)
+            {
+                for (int y = 4; y <= 12; y++)
+                {
+                    blocked.Add(new Point(x, y));
+                }
+            }
+
+            // Vertical extension
+            for (int x = 10; x <= 12; x++)
+            {
+                for (int y = 0; y <= 12; y++)
+                {
+                    blocked.Add(new Point(x, y));
+                }
+            }
+
+            // Create a corridor/opening
+            blocked.Remove(new Point(10, 12));
+            blocked.Remove(new Point(9, 12));
+            blocked.Remove(new Point(8, 12));
+
+            // Connect neighbors (4-directional)
+            int[] dx = { 1, -1, 0, 0 };
+            int[] dy = { 0, 0, 1, -1 };
+
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    Point p = new Point(x, y);
+
+                    if (blocked.Contains(p))
+                        continue;
+
+                    for (int i = 0; i < 4; i++)
+                    {
+                        int nx = x + dx[i];
+                        int ny = y + dy[i];
+
+                        if (nx < 0 || ny < 0 || nx >= width || ny >= height)
+                            continue;
+
+                        Point np = new Point(nx, ny);
+
+                        if (blocked.Contains(np))
+                            continue;
+
+                        grid[x, y].Edges.Add(
+                            new Edge<Point>(
+                                grid[x, y],
+                                grid[nx, ny],
+                                1
+                            )
+                        );
+                    }
+                }
+            }
+
+            Vertex<Point> start = grid[0, 19];
+            Vertex<Point> end = grid[19, 0];
+
+            // Act
+            List<Edge<Point>> path = graph.AStar(start, end);
+
+            // Assert
+            Assert.IsNotNull(path);
+
+            // Ensure path reaches target
+            Assert.AreEqual(end, path[^1].EndVertex);
+
+            // Ensure no blocked tiles are used
+            foreach (var edge in path)
+            {
+                Assert.IsFalse(blocked.Contains(edge.StartVertex.Value));
+                Assert.IsFalse(blocked.Contains(edge.EndVertex.Value));
+            }
+
+            // Optional debug output
+            Console.WriteLine($"Path length: {path.Count}");
+        }
+
+        [TestMethod]
         public void Pathfind_ShouldReturnCorrectPath()
         {
             // Arrange
@@ -43,11 +150,11 @@ namespace PathfindTest
             var path = graph.Pathfindgood(a, e);
 
             // Assert
-            Assert.NotNull(path);
-            Assert.Equal(3, path.Count);
+            Assert.IsNotNull(path);
+            Assert.AreEqual(3, path.Count);
 
         }
-        [Fact]
+        [TestMethod]
         public void Pathfindimpossible()
         {
             Graph<string> graph = new Graph<string>();
@@ -79,7 +186,7 @@ namespace PathfindTest
             List<Edge<string>> path = graph.Pathfindgood(a, e);
 
             // Assert
-            Assert.Null(path);
+            Assert.IsNull(path);
         }
     }
 }
