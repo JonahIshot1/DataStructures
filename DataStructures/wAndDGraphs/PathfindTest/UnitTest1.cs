@@ -1,7 +1,7 @@
 ﻿using wAndDGraphs;
 using System;
 using System.Collections.Generic;
-using Xunit;
+namespace PathfindTest;
 namespace PathfindTest
 {
     public class UnitTest1
