@@ -1,13 +1,14 @@
+using wAndDGraphs;
+
 namespace PathFindingVis
 {
     public partial class Form1 : Form
     {
 
         const int butS = 50;
-        const int width = 25;
-        const int hight = 16;
-        public Button[,] buts = new Button[width, hight];
-        public bool[,] Clicked = new bool[width, hight];
+        const int width =7;
+        const int hight = 7;
+        death[,] verti = new death[width,hight];
         public Form1()
         {
             InitializeComponent();
@@ -18,17 +19,18 @@ namespace PathFindingVis
             {
                 for (int h = 0; h < hight; h++)
                 {
-                    buts[w, h] = new Button();
-                    buts[w, h].Size = new Size(butS, butS);
-                    buts[w, h].Location = new Point(w * butS, h * butS);
-                    buts[w, h].BackColor = Color.Pink;
-
-                    buts[w, h].Click += But_Click;
-                    Controls.Add(buts[w, h]);
+                    Button temp= new Button();
+                    temp = new Button();
+                    temp.Size = new Size(butS, butS);
+                    temp.Location = new Point(w * butS, h * butS);
+                    temp.BackColor = Color.Pink;
+                    temp.Click += But_Click;
+                    Controls.Add(temp);
+                    verti[w, h] = new death(null,false,temp);
                 }
             }
-            buts[0, 0].BackColor = Color.Red;
-            buts[width - 1, hight - 1].BackColor = Color.Maroon;
+            verti[0, 0].but.BackColor = Color.Red;
+            verti[width - 1, hight - 1].but.BackColor = Color.Maroon;
             Button FindBut = new Button
             {
                 Name = "FindBut",
@@ -52,18 +54,78 @@ namespace PathFindingVis
             {
                 Sender.BackColor = Color.Black;
 
-                Clicked[Sender.Location.X / butS, Sender.Location.Y / butS] = true;
+                verti[Sender.Location.X / butS, Sender.Location.Y / butS].clicked = true;
             }
             else
             {
                 Sender.BackColor = Color.Pink;
 
-                Clicked[Sender.Location.X / butS, Sender.Location.Y / butS] = false;
+                verti[Sender.Location.X / butS, Sender.Location.Y / butS].clicked = false;
             }
         }
 
-        private void FindBut_Click(object sender, EventArgs e)
+        private async void FindBut_Click(object sender, EventArgs e)
         {
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < hight; y++)
+                {
+                    if (x == 0 && y == 0) continue;
+                    if (x == (width-1) && y == (hight - 1)) continue;
+                    if (verti[x,y].clicked==false)
+                    {
+                        verti[x, y].but.BackColor = Color.Pink;
+                    }
+                    
+                }
+            }
+                    Graph < Point > grap = new();
+            for(int x =0; x < width;x++)
+            {
+                for(int y =0; y < hight;y++)
+                {
+                    Point p = new Point(x, y);
+                    if (verti[x,y].clicked==false)
+                    {
+                        Vertex<Point> temp = new Vertex<Point>(p);
+                        grap.AddVertex(temp);
+                        verti[x, y].vert = temp; 
+                    }
+                }
+            }
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < hight; y++)
+                {
+                    death cur = verti[x, y]; 
+                    if (cur.clicked == false)
+                    {
+                        if(x+1<width && verti[x+1,y].clicked==false )
+                        {
+                            grap.AddEdge(cur.vert, verti[x + 1, y].vert, 1);
+                        }
+                        if (x -1 > width && verti[x - 1, y].clicked == false)
+                        {
+                            grap.AddEdge(cur.vert, verti[x - 1, y].vert, 1);
+                        }
+                        if (y+1  <hight && verti[x , y+1].clicked == false)
+                        {
+                            grap.AddEdge(cur.vert, verti[x, y+1].vert, 1);
+                        }
+                        if (y-1 > width && verti[x, y-1].clicked == false)
+                        {
+                            grap.AddEdge(cur.vert, verti[x, y-1].vert, 1);
+                        }
+                    }
+                }
+            }
+            List<Edge<Point>> outP = grap.AStar(verti[0, 0].vert, verti[width-1,hight-1].vert);
+            foreach(Edge<Point> cur in outP)
+            {
+                verti[cur.EndVertex.Value.X, cur.EndVertex.Value.Y].but.BackColor=Color.Blue;
+                await Task.Delay(200);
+            }
+
 
         }
 
