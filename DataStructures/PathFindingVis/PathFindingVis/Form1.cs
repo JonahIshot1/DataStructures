@@ -76,10 +76,16 @@ namespace PathFindingVis
                     {
                         verti[x, y].but.BackColor = Color.Pink;
                     }
+                    else
+                    {
+                        verti[x, y].but.BackColor = Color.Black;
+                    }
                     
                 }
             }
-                    Graph < Point > grap = new();
+            verti[0, 0].but.BackColor = Color.Red;
+            verti[width-1, hight-1].but.BackColor = Color.Maroon;
+            Graph < Point > grap = new();
             for(int x =0; x < width;x++)
             {
                 for(int y =0; y < hight;y++)
@@ -104,7 +110,7 @@ namespace PathFindingVis
                         {
                             grap.AddEdge(cur.vert, verti[x + 1, y].vert, 1);
                         }
-                        if (x -1 > width && verti[x - 1, y].clicked == false)
+                        if (x -1 >= 0 && verti[x - 1, y].clicked == false)
                         {
                             grap.AddEdge(cur.vert, verti[x - 1, y].vert, 1);
                         }
@@ -112,7 +118,7 @@ namespace PathFindingVis
                         {
                             grap.AddEdge(cur.vert, verti[x, y+1].vert, 1);
                         }
-                        if (y-1 > width && verti[x, y-1].clicked == false)
+                        if (y-1 >= 0 && verti[x, y-1].clicked == false)
                         {
                             grap.AddEdge(cur.vert, verti[x, y-1].vert, 1);
                         }
@@ -120,10 +126,16 @@ namespace PathFindingVis
                 }
             }
             List<Edge<Point>> outP = grap.AStar(verti[0, 0].vert, verti[width-1,hight-1].vert);
+            if (outP is null)
+            {
+                verti[0, 0].but.BackColor = Color.Yellow ;
+                verti[width - 1, hight - 1].but.BackColor = Color.Yellow ;
+                return;
+            }            
             foreach(Edge<Point> cur in outP)
             {
                 verti[cur.EndVertex.Value.X, cur.EndVertex.Value.Y].but.BackColor=Color.Blue;
-                await Task.Delay(200);
+                await Task.Delay(1500/outP.Count);
             }
 
 
