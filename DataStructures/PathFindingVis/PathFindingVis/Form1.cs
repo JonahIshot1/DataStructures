@@ -6,8 +6,8 @@ namespace PathFindingVis
     {
 
         const int butS = 50;
-        const int width =7;
-        const int hight = 7;
+        const int width =11;
+        const int hight = 11;
         death[,] verti = new death[width,hight];
         public Form1()
         {

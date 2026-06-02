@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
+using System.Numerics;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace wAndDGraphs
@@ -96,6 +98,19 @@ namespace wAndDGraphs
             float dy = Math.Abs(vertex.Y - goal.Y);
             return(dx + dy);
         }
+
+        public bool BellmanFord(Vertex<T> start)
+        {
+            Dictionary<Vertex<T>,float> dic = new();
+            foreach (Edge<T> ege in edges )
+            {
+                if(!dic.ContainsKey(ege.StartVertex))
+                {
+                    dic.Add(ege.StartVertex,);
+                }
+            }
+        }
+
         public List<Edge<Point>> AStar(Vertex<Point> start, Vertex<Point> target)
         {
             if (start is null) return null;

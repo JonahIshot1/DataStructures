@@ -155,6 +155,112 @@ namespace PathfindTest
 
         }
         [TestMethod]
+        public void NegativeLoop()
+        {
+            // Arrange
+            Graph<string> graph = new Graph<string>();
+
+            var a = new Vertex<string>("A") { Edges = new List<Edge<string>>() };
+            var b = new Vertex<string>("B") { Edges = new List<Edge<string>>() };
+            var c = new Vertex<string>("C") { Edges = new List<Edge<string>>() };
+
+
+            graph.vertices.AddRange(new[] { a, b, c });
+
+            // Manually connect edges (since AddEdge is buggy)
+            var ab = new Edge<string>(a, b, 1);
+            var bc = new Edge<string>(b, c, 1);
+            var ca = new Edge<string>(c, a, -4);
+
+
+
+
+            a.Edges.Add(ab);
+            b.Edges.Add(bc);
+            c.Edges.Add(ca);
+
+
+
+            // Act
+            bool path = graph.BellmanFord(a);
+
+            // Assert
+            Assert.IsTrue(path);
+
+        }
+        [TestMethod]
+        public void NegativeLoop2()
+        {
+            // Arrange
+            Graph<string> graph = new Graph<string>();
+
+            var a = new Vertex<string>("A") { Edges = new List<Edge<string>>() };
+            var b = new Vertex<string>("B") { Edges = new List<Edge<string>>() };
+            var c = new Vertex<string>("C") { Edges = new List<Edge<string>>() };
+
+
+            graph.vertices.AddRange(new[] { a, b, c });
+
+            // Manually connect edges (since AddEdge is buggy)
+            var ab = new Edge<string>(a, b, 1);
+            var bc = new Edge<string>(b, c, 1);
+            var ca = new Edge<string>(c, a, -1);
+
+
+
+
+            a.Edges.Add(ab);
+            b.Edges.Add(bc);
+            c.Edges.Add(ca);
+
+
+
+            // Act
+            bool path = graph.BellmanFord(a);
+
+            // Assert
+            Assert.IsFalse(path);
+
+        }
+        [TestMethod]
+        public void NegativeLoop3()
+        {
+            Graph<string> graph = new Graph<string>();
+
+            var s = new Vertex<string>("s") { Edges = new List<Edge<string>>() };
+            var q = new Vertex<string>("q") { Edges = new List<Edge<string>>() };
+            var r = new Vertex<string>("r") { Edges = new List<Edge<string>>() };
+            var p = new Vertex<string>("p") { Edges = new List<Edge<string>>() };
+            var f = new Vertex<string>("f") { Edges = new List<Edge<string>>() };
+
+            graph.vertices.AddRange(new[] {s, q, r, p, f });
+
+            // Manually connect edges (since AddEdge is buggy)
+            var sq = new Edge<string>(s, q,1);
+            var qr = new Edge<string>(q, r, 5);
+            var rp = new Edge<string>(r, p, -50);
+            var sp = new Edge<string>(s, p, 2);
+            var rf = new Edge<string>(r, f, 100);
+            var pf = new Edge<string>(p, f, 100);
+
+
+
+            s.Edges.Add(sq);
+            q.Edges.Add(qr);
+            r.Edges.Add(rp);
+            s.Edges.Add(sp);
+            r.Edges.Add(rf);
+            p.Edges.Add(pf);
+
+
+
+            bool path = graph.BellmanFord(s);
+
+            // Assert
+            Assert.IsFalse(path);
+
+        }
+        [TestMethod]
         public void Pathfindimpossible()
         {
             Graph<string> graph = new Graph<string>();
