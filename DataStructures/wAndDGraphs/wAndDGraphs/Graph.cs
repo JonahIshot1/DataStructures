@@ -33,7 +33,9 @@ namespace wAndDGraphs
             if (!vertices.Contains(a) || !vertices.Contains(b)) return false;
             if (GetEdge(a, b) is not null) return false;
             //if (a.Edges.Contains(GetEdge(a, b))) return false;
-            a.Edges.Add(new Edge<T>(a, b, distance));
+            Edge<T> temp = new Edge<T>(a, b, distance);
+            edges.Add(temp);
+            a.Edges.Add(temp);
             return true;
         }
         public bool RemoveEdge(Vertex<T> a, Vertex<T> b)
@@ -101,14 +103,33 @@ namespace wAndDGraphs
 
         public bool BellmanFord(Vertex<T> start)
         {
-            Dictionary<Vertex<T>,float> dic = new();
-            foreach (Edge<T> ege in edges )
+            Dictionary<Vertex<T>, VertexInfo<T>> dic = new();
+
+            foreach(Vertex<T> vert in vertices)
             {
-                if(!dic.ContainsKey(ege.StartVertex))
+                dic.Add(vert,new VertexInfo<T>(vert, null, float.MaxValue));
+            }
+            dic[start].TotalCost = 0;
+            for (int i = 0; i < vertices.Count - 1; i++)
+            {
+                foreach (Edge<T> ege in edges)
                 {
-                    dic.Add(ege.StartVertex,);
+                    if (dic[ege.StartVertex].TotalCost + ege.Cost < dic[ege.EndVertex].TotalCost)
+                    {
+                        dic[ege.EndVertex].TotalCost = dic[ege.StartVertex].TotalCost + ege.Cost;
+                    }
                 }
             }
+
+            foreach (Edge<T> eg in edges)
+            {
+                if (dic[eg.StartVertex].TotalCost + eg.Cost < dic[eg.EndVertex].TotalCost)
+                {
+                    return true;
+                }
+            }
+            return false;
+
         }
 
         public List<Edge<Point>> AStar(Vertex<Point> start, Vertex<Point> target)
