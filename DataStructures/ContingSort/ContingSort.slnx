@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="ContingSort/ContingSort.csproj" />
+  <Project Path="UnitTest/UnitTest.csproj" Id="145d39e5-0691-4445-9ec6-30a118f96552" />
 </Solution>
