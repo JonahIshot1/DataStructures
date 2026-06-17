@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Radick/Radick.csproj" />
+  <Project Path="RadTest/RadTest.csproj" />
+</Solution>
