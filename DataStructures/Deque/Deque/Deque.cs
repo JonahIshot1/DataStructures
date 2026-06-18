@@ -6,7 +6,7 @@ namespace Deque
 {
     public class Deque<T> : IDeque<T>, IStack<T>, IQueue<T>
     {
-        LinkedList<T> list;
+        public LinkedList<T> list;
         public Deque()
         {
             list = new();
@@ -65,7 +65,7 @@ namespace Deque
 
         void IStack<T>.Push(T value)
         {
-            list.AddFirst(value);
+            list.AddLast(value);
         }
 
         public void PushBack(T value)
