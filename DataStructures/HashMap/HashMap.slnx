@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="HashMap/HashMap.csproj" />
+  <Project Path="HashMapTest/HashMapTest.csproj" Id="95397faa-2fc2-4948-9ae2-064a87facb50" />
 </Solution>
