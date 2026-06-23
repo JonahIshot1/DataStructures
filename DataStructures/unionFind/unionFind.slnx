@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="unionFind/unionFind.csproj" />
+  <Project Path="unionFIndTest/unionFIndTest.csproj" />
+</Solution>
