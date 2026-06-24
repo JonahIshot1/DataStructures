@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Text;
 
-namespace unionFind 
+namespace unionFind
 {
-    public class QuickFInd<T> : IUnionFind<T>
+    public class QuickUnion<T>: IUnionFind<T>
     {
         Dictionary<T, int> dict;
         int[] friends;
-        public QuickFInd(T[] itemss) 
+        public QuickUnion(T[] itemss)
         {
             dict = new Dictionary<T, int>();
             friends = new int[itemss.Length];
-            for(int i =0; i<itemss.Length;i++)
+            for (int i = 0; i < itemss.Length; i++)
             {
                 dict.Add(itemss[i], i);
                 friends[i] = i;
@@ -21,7 +20,7 @@ namespace unionFind
         }
         public bool AreConnected(T p, T q)
         {
-            if(p==null||q==null)
+            if (p == null || q == null)
             {
                 throw new Exception();
             }
@@ -34,8 +33,8 @@ namespace unionFind
                 throw new Exception();
             }
 
-            int i1 = friends[dict[p]];
-            int i2 = friends[dict[q]];
+            int i1 = Find(p);
+            int i2 = Find(q);
             return i1 == i2;
         }
 
@@ -49,7 +48,12 @@ namespace unionFind
             {
                 throw new Exception();
             }
-            return friends[dict[p]]; 
+            int cur = dict[p];
+            while (friends[cur]!=cur)
+            {
+                cur= friends[cur];
+            }
+            return cur;
         }
 
         public bool Union(T p, T q)
@@ -66,17 +70,9 @@ namespace unionFind
             {
                 throw new Exception();
             }
-            int i1 = friends[dict[p]];
-            int i2 = friends[dict[q]];
-
-            for (int i = 0; i < friends.Length; i++)
-            {
-                if (friends[i]==i2)
-                {
-                    friends[i] = i1;
-                }
-            }
+            friends[dict[p]] = dict[q];
             return true;
         }
+
     }
 }
