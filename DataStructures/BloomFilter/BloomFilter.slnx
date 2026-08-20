@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="BloomFilter/BloomFilter.csproj" />
+  <Project Path="BloomFilterTest/BloomFilterTest.csproj" />
+</Solution>
