@@ -2,7 +2,7 @@
 {
     public class Tree<T> where T : IComparable<T>
     {
-        public Node<T> root;
+        public TreeNode<T> root;
         public Tree()
         {
         }
@@ -11,11 +11,11 @@
 
             if (root == null)
             {
-                root = new Node<T>();
+                root = new TreeNode<T>();
                 root.Value = value;
                 return true;
             }
-            Node<T> curVal = root;
+            TreeNode<T> curVal = root;
             while (!curVal.Value.Equals(value))
             {
                 if (curVal.Value.CompareTo(value) > 0)
@@ -23,7 +23,7 @@
                     if (curVal.Left != null) { curVal = curVal.Left; }
                     else
                     {
-                        curVal.Left = new Node<T>();
+                        curVal.Left = new TreeNode<T>();
                         curVal.Left.Value = value;
                         return true;
                     }
@@ -33,7 +33,7 @@
                     if (curVal.Right != null) { curVal = curVal.Right; }
                     else
                     {
-                        curVal.Right = new Node<T>();
+                        curVal.Right = new TreeNode<T>();
                         curVal.Right.Value = value;
                         return true;
                     }
@@ -41,13 +41,13 @@
             }
             return false;
         }
-        public Node<T> Search(T value)
+        public TreeNode<T> Search(T value)
         {
             if (root == null)
             {
                 return null;
             }
-            Node<T> curVal = root;
+            TreeNode<T> curVal = root;
             while (!curVal.Value.Equals(value))
             {
                 if (curVal.Value.CompareTo(value) > 0)
@@ -73,18 +73,18 @@
         {
             return Search(value) != null;
         }
-        public T Minimum(Node<T> nodeToGetMinOf)
+        public T Minimum(TreeNode<T> nodeToGetMinOf)
         {
-            Node<T> curVa = nodeToGetMinOf;
+            TreeNode<T> curVa = nodeToGetMinOf;
             while (curVa.Left != null)
             {
                 curVa = curVa.Left;
             }
             return curVa.Value;
         }
-        public T Maximum(Node<T> nodeToGetMaxOf)
+        public T Maximum(TreeNode<T> nodeToGetMaxOf)
         {
-            Node<T> curVa = nodeToGetMaxOf;
+            TreeNode<T> curVa = nodeToGetMaxOf;
             while (curVa.Right != null)
             {
                 curVa = curVa.Right;
@@ -94,9 +94,9 @@
         public Queue<T> LevelOrder()
         {
             Queue<T> OutP = new Queue<T>();
-            Queue<Node<T>> Tep = new Queue<Node<T>>();
+            Queue<TreeNode<T>> Tep = new Queue<TreeNode<T>>();
             Tep.Enqueue(root);
-            Node<T> previous;
+            TreeNode<T> previous;
             while (true)
             {
                 previous = Tep.Dequeue();
@@ -139,9 +139,9 @@
             //    }
             //}
             Queue<T> OutP = new Queue<T>();
-            Stack<Node<T>> Tep = new Stack<Node<T>>();
+            Stack<TreeNode<T>> Tep = new Stack<TreeNode<T>>();
             Tep.Push(root);
-            Node<T> previous;
+            TreeNode<T> previous;
             while (Tep.Count != 0)
             {
                 previous = Tep.Pop();
@@ -157,9 +157,9 @@
         public Stack<T> PostOrder()
         {
             Stack<T> OutP = new Stack<T>();
-            Stack<Node<T>> Tep = new Stack<Node<T>>();
+            Stack<TreeNode<T>> Tep = new Stack<TreeNode<T>>();
             Tep.Push(root);
-            Node<T> previous;
+            TreeNode<T> previous;
             while (Tep.Count != 0)
             {
                 previous = Tep.Pop();
@@ -174,11 +174,11 @@
         }
         public bool Remove(T Target)
         {
-            Node<T> outP = new Node<T>();
+            TreeNode<T> outP = new TreeNode<T>();
             outP = Search(Target);
             if (outP == null) return false;
-            Node<T> temp = new Node<T>();
-            Node<T> previous = new Node<T>();
+            TreeNode<T> temp = new TreeNode<T>();
+            TreeNode<T> previous = new TreeNode<T>();
             if (outP.Left != null) temp = outP.Left;
             while (true)
             {
@@ -199,7 +199,7 @@
 
 
         }
-        public Queue<T> inOrderRecursive(Queue<T> outP,Node<T> cur)
+        public Queue<T> inOrderRecursive(Queue<T> outP,TreeNode<T> cur)
         {
             if (cur == null) return outP;
             inOrderRecursive(outP, cur.Left);
@@ -210,7 +210,7 @@
             //add curr to output
             //call inOrder on right side
         }
-        public Queue<T> preOrderRecursive(Queue<T> outP,Node<T>cur)
+        public Queue<T> preOrderRecursive(Queue<T> outP,TreeNode<T>cur)
         {
             if (cur == null) return outP;
             outP.Enqueue(cur.Value);
@@ -218,7 +218,7 @@
             preOrderRecursive(outP, cur.Right);
             return outP;
         }
-        public Queue<T> postOrderRecursive(Queue<T> outP, Node<T> cur)
+        public Queue<T> postOrderRecursive(Queue<T> outP, TreeNode<T> cur)
         {
             if (cur == null) return outP;
             postOrderRecursive(outP, cur.Left);
@@ -226,12 +226,12 @@
             outP.Enqueue(cur.Value);
             return outP;
         }
-        public Queue<T> InOrder(Node<T> start)
+        public Queue<T> InOrder(TreeNode<T> start)
         {
             Queue<T> OutP = new Queue<T>();
-            Stack<Node<T>> Tep = new Stack<Node<T>>();
+            Stack<TreeNode<T>> Tep = new Stack<TreeNode<T>>();
 
-            Node<T> cur = start;
+            TreeNode<T> cur = start;
             do
             {
                 if (cur != null)
